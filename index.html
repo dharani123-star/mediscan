@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR Language Selector</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body {
+      background-color: #0b1a2f;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    #reader {
+      width: 300px;
+      margin: 20px auto;
+      border: 2px dashed #4f90ff;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .language-buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #4f90ff;
+      border: none;
+      padding: 12px 20px;
+      margin: 10px;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2e6bcb;
+    }
+
+    #videoContainer {
+      margin-top: 30px;
+    }
+
+    video {
+      width: 300px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Scan QR Code</h2>
+  <div id="reader"></div>
+
+  <div id="languageSection" style="display: none;">
+    <h2>Select Language</h2>
+    <div class="language-buttons">
+      <button onclick="playVideo('telugu')">Telugu</button>
+      <button onclick="playVideo('hindi')">Hindi</button>
+      <button onclick="playVideo('english')">English</button>
+    </div>
+  </div>
+
+  <div id="videoContainer"></div>
+
+  <script>
+    // Initialize the QR code scanner
+    const html5QrCode = new Html5Qrcode("reader");
+
+    function onScanSuccess(decodedText, decodedResult) {
+      console.log("QR Code scanned:", decodedText);
+      html5QrCode.stop(); // Stop the scanner once code is scanned
+      document.getElementById('languageSection').style.display = 'block';
+
+      // Optionally, based on QR code value, pre-select or auto-play a video
+      // Example: if QR contains "english", directly play the English video
+      if (["english", "hindi", "telugu"].includes(decodedText.toLowerCase())) {
+        playVideo(decodedText.toLowerCase());
+      }
+    }
+
+    Html5Qrcode.getCameras().then(cameras => {
+      if (cameras && cameras.length) {
+        html5QrCode.start(
+          { facingMode: "environment" }, // Use back camera if available
+          {
+            fps: 10,
+            qrbox: 250
+          },
+          onScanSuccess
+        );
+      }
+    }).catch(err => {
+      console.error("Camera access error: ", err);
+    });
+
+    function playVideo(language) {
+      const videoContainer = document.getElementById('videoContainer');
+      let videoSrc = '';
+
+      switch (language) {
+        case 'telugu':
+          videoSrc = 'videos/telugu1.mp4';
+          break;
+        case 'hindi':
+          videoSrc = 'videos/hindi1.mp4';
+          break;
+        case 'english':
+          videoSrc = 'videos/english1.mp4';
+          break;
+      }
+
+      videoContainer.innerHTML = `
+        <video controls autoplay>
+          <source src="${videoSrc}" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      `;
+    }
+  </script>
+
+</body>
+</html>

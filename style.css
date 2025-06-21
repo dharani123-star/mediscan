@@ -1,0 +1,31 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f7f7f7;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+#qr-reader {
+  margin-bottom: 30px;
+}
+
+#language-selection button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+#video-container video {
+  margin-top: 20px;
+  max-width: 100%;
+  border: 2px solid #333;
+  border-radius: 10px;
+}

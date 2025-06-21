@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>QR Code Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+      body {
+        background-color: #0f1c2e;
+        color: white;
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Scan QR Code</h2>
+    <div id="reader" style="width: 300px;"></div>
+
+    <script>
+      const html5QrCode = new Html5Qrcode("reader");
+
+      Html5Qrcode.getCameras().then(cameras => {
+        if (cameras && cameras.length) {
+          html5QrCode.start(
+            { facingMode: "environment" }, // Rear camera
+            { fps: 10, qrbox: 250 },
+            (decodedText, decodedResult) => {
+              console.log(`QR Code scanned: ${decodedText}`);
+              alert("Scanned: " + decodedText);
+              html5QrCode.stop(); // stop after successful scan
+            },
+            (errorMessage) => {
+              // console.warn(`QR Code scan error: ${errorMessage}`);
+            }
+          );
+        }
+      }).catch(err => {
+        console.error("Camera initialization error:", err);
+      });
+    </script>
+  </body>
+</html>
